@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CircleUp</string>
+    <string name="title_activity_log_in">LogInActivity</string>
+    <string name="title_activity_home">MainActivity</string>
+</resources>
