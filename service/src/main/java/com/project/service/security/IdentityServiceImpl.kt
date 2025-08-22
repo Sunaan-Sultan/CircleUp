@@ -5,9 +5,9 @@ import com.project.models.security.IdentityService
 import com.project.models.users.User
 
 class IdentityServiceImpl(private val context: Context) : IdentityService {
-    override fun authenticate(username: String, password: String): Boolean {
+    override fun authenticate(email: String, password: String): Boolean {
         val identityRepository = SecurityFactory.getIdentityRepository(context)
-        val identityResponse = identityRepository.getToken(username, password)
+        val identityResponse = identityRepository.getToken(email, password)
         return identityResponse.isNotEmpty()
     }
 
@@ -31,25 +31,13 @@ class IdentityServiceImpl(private val context: Context) : IdentityService {
     }
 
     override fun registered(
-        username: String,
-        firstname: String,
-        lastname: String,
         email: String,
-        mobileNumber: String,
-        gid: String,
-        dob: String,
         password: String,
         confirmPassword: String,
     ): Boolean {
         val identityRepository = SecurityFactory.getIdentityRepository(context)
         val identityResponse = identityRepository.getRegistrationToken(
-            username,
-            firstname,
-            lastname,
             email,
-            mobileNumber,
-            gid,
-            dob,
             password,
             confirmPassword
         )

@@ -1,28 +1,28 @@
 [
   {
     "id": 1,
-    "username": "admin",
+    "email": "admin@gmail.com",
     "password": "Admin@123",
     "isMember": false,
     "userRole": "admin"
   },
   {
     "id": 2,
-    "username": "provider",
+    "email": "provider@gmail.com",
     "password": "Provider@123",
     "isMember": false,
     "userRole": "provider"
   },
   {
     "id": 3,
-    "username": "member",
+    "email": "member@gmail.com",
     "password": "Member@123",
     "isMember": true,
     "userRole": "member"
   },
   {
     "id": 4,
-    "username": "member2",
+    "email": "member2@gmail.com",
     "password": "Member@1234",
     "isMember": true,
     "userRole": "member"

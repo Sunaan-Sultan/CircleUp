@@ -7,7 +7,7 @@ open class PreferencesManager(context: Context) {
     private val     sharedPreferences: SharedPreferences =
         context.getSharedPreferences("RegistrationKey", Context.MODE_PRIVATE)
     private val userPreference: SharedPreferences =
-        context.getSharedPreferences("Username", Context.MODE_PRIVATE)
+        context.getSharedPreferences("Email", Context.MODE_PRIVATE)
     private val passwordPreference: SharedPreferences =
         context.getSharedPreferences("Password", Context.MODE_PRIVATE)
     fun saveKey(key: String, value: String) {

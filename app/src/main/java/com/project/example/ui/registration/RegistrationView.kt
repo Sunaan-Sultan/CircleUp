@@ -101,91 +101,7 @@ fun RegistrationView(navController: NavHostController) {
             .background(if (isSystemInDarkTheme()) BackgroundColor else Color.White)
             .verticalScroll(rememberScrollState())
     ) {
-        OutlinedTextField(
-            value = username,
-            onValueChange = {
-                if (isWithinMaxCharLimit(it, 40)) {
-                    username = it
-                }
-            },
-            placeholder = { Text("Enter your username", color = contentColor) },
-            label = { Text("Username", color = contentColor) },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Ascii,
-            ),
-            singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = contentColor,
-                unfocusedLabelColor = contentColor,
-                focusedLabelColor = contentColor,
-                unfocusedBorderColor = contentColor,
-                focusedBorderColor = contentColor,
-                cursorColor = contentColor,
-                leadingIconColor = contentColor,
-                placeholderColor = contentColor,
-
-                ),
-            modifier = Modifier.fillMaxWidth(),
-        )
         Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = firstName,
-            onValueChange = {
-                if (isWithinMaxCharLimit(it, 40)) {
-                    firstName = it
-                }
-            },
-            placeholder = { Text("Enter your First Name", color = contentColor) },
-            label = { Text("First Name", color = contentColor) },
-
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Ascii,
-            ),
-            singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = contentColor,
-                unfocusedLabelColor = contentColor,
-                focusedLabelColor = contentColor,
-                unfocusedBorderColor = contentColor,
-                focusedBorderColor = contentColor,
-                cursorColor = contentColor,
-                leadingIconColor = contentColor,
-                placeholderColor = contentColor,
-
-                ),
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = lastName,
-            onValueChange = {
-                if (isWithinMaxCharLimit(it, 40)) {
-                    lastName = it
-                }
-            },
-            placeholder = { Text("Enter your Last Name", color = contentColor) },
-            label = { Text("Last Name", color = contentColor) },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Ascii,
-            ),
-            singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = contentColor,
-                unfocusedLabelColor = contentColor,
-                focusedLabelColor = contentColor,
-                unfocusedBorderColor = contentColor,
-                focusedBorderColor = contentColor,
-                cursorColor = contentColor,
-                leadingIconColor = contentColor,
-                placeholderColor = contentColor,
-
-                ),
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-
         OutlinedTextField(
             value = email,
             onValueChange = {
@@ -210,105 +126,6 @@ fun RegistrationView(navController: NavHostController) {
                 ),
             modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = mobileNumber,
-            onValueChange = {
-                if (isWithinMaxCharLimit(it, 11)) {
-                    mobileNumber = it
-                }
-            },
-            placeholder = { Text("880XXXXXXXXX", color = contentColor) },
-            label = { Text("Mobile Number", color = contentColor) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = contentColor,
-                unfocusedLabelColor = contentColor,
-                focusedLabelColor = contentColor,
-                unfocusedBorderColor = contentColor,
-                focusedBorderColor = contentColor,
-                cursorColor = contentColor,
-                leadingIconColor = contentColor,
-                placeholderColor = contentColor,
-
-                ),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Phone,
-            ),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = nid,
-            onValueChange = {
-                if (isWithinMaxCharLimit(it, 20)) {
-                    nid = it
-                }
-            },
-            placeholder = { Text("National Id", color = contentColor) },
-            label = { Text("GID", color = contentColor) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = contentColor,
-                unfocusedLabelColor = contentColor,
-                focusedLabelColor = contentColor,
-                unfocusedBorderColor = contentColor,
-                focusedBorderColor = contentColor,
-                cursorColor = contentColor,
-                leadingIconColor = contentColor,
-                placeholderColor = contentColor,
-
-                ),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Phone,
-            ),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = dob,
-            onValueChange = {
-                if (isWithinMaxCharLimit(it, 10)) {
-                    dob = it
-                    isBirthdayError = it.isEmpty()
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("Date of Birth", color = contentColor) },
-            placeholder = { Text("MM/DD/YYYY", color = contentColor) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = contentColor,
-                unfocusedLabelColor = contentColor,
-                unfocusedBorderColor = contentColor,
-                focusedBorderColor = contentColor,
-                focusedLabelColor = contentColor,
-                cursorColor = contentColor,
-                leadingIconColor = contentColor,
-                placeholderColor = contentColor,
-            ),
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_calendar_month_24),
-                    contentDescription = "Calendar Icon",
-                    modifier = Modifier
-                        .clickable {
-                            dateDialogState.show()
-                        }
-                        .padding(8.dp),
-                    tint = textColor,
-                )
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Ascii,
-            ),
-            singleLine = true,
-        )
-
         Spacer(modifier = Modifier.height(5.dp))
 
         OutlinedTextField(
@@ -395,13 +212,7 @@ fun RegistrationView(navController: NavHostController) {
                     val registrationBean = RegistrationPresenter()
                     val response = registrationBean.registration(
                         context,
-                        username,
-                        firstName,
-                        lastName,
                         email,
-                        mobileNumber,
-                        nid,
-                        dob,
                         password,
                         confirmPassword,
                     )

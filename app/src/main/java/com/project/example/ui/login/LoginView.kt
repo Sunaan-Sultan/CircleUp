@@ -55,10 +55,10 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun LoginView(navController: NavHostController, preferencesManager: PreferencesManager) {
-    var username by remember { mutableStateOf(preferencesManager.getKey("username", "")) }
+    var email by remember { mutableStateOf(preferencesManager.getKey("email", "")) }
     var password by remember { mutableStateOf(preferencesManager.getKey("password", "")) }
     var isForgetClicked by remember { mutableStateOf(false) }
-    var checked by remember { mutableStateOf(username.isNotEmpty() && password.isNotEmpty()) }
+    var checked by remember { mutableStateOf(email.isNotEmpty() && password.isNotEmpty()) }
     var passwordVisible by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
@@ -126,14 +126,14 @@ fun LoginView(navController: NavHostController, preferencesManager: PreferencesM
                     Spacer(modifier = Modifier.height(AppTheme.dimens.spacer1))
 
                     OutlinedTextField(
-                        value = username,
+                        value = email,
                         onValueChange = {
                             if (isWithinMaxCharLimit(it, 40)) {
-                                username = it
+                                email = it
                             }
                         },
-                        label = { Text("Username", color = contentColor, fontSize = 16.sp) },
-                        placeholder = { Text("Enter your username", color = contentColor, fontSize = 14.sp) },
+                        label = { Text("E-mail", color = contentColor, fontSize = 16.sp) },
+                        placeholder = { Text("Enter your email", color = contentColor, fontSize = 14.sp) },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             textColor = contentColor,
                             unfocusedLabelColor = contentColor,
@@ -147,15 +147,15 @@ fun LoginView(navController: NavHostController, preferencesManager: PreferencesM
                         leadingIcon = {
                             Icon(
                                 Icons.Default.Person,
-                                contentDescription = "Username Icon",
+                                contentDescription = "email Icon",
                             )
                         },
                         trailingIcon = {
-                            if (username.isNotEmpty()) {
+                            if (email.isNotEmpty()) {
                                 Icon(
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = "Clear Icon",
-                                    modifier = Modifier.clickable { username = "" },
+                                    modifier = Modifier.clickable { email = "" },
                                     tint = contentColor,
                                 )
                             }
@@ -222,9 +222,9 @@ fun LoginView(navController: NavHostController, preferencesManager: PreferencesM
                             onCheckedChange = { isChecked ->
                                 checked = isChecked
                                 if (!isChecked) {
-                                    preferencesManager.removeKey("username")
+                                    preferencesManager.removeKey("email")
                                     preferencesManager.removeKey("password")
-                                    username = ""
+                                    email = ""
                                     password = ""
                                 }
                             },
@@ -243,7 +243,7 @@ fun LoginView(navController: NavHostController, preferencesManager: PreferencesM
                         DisposableEffect(Unit) {
                             onDispose {
                                 if (checked) {
-                                    preferencesManager.saveKey("username", username)
+                                    preferencesManager.saveKey("email", email)
                                     preferencesManager.saveKey("password", password)
                                 }
                             }
@@ -270,7 +270,7 @@ fun LoginView(navController: NavHostController, preferencesManager: PreferencesM
                         onClick = {
                             val loginBean = LoginPresenter(context)
                             // Perform login authentication
-                            val authResult = loginBean.login(username, password)
+                            val authResult = loginBean.login(email, password)
 
                             when (authResult) {
                                 is AuthResult.Success -> {
@@ -280,7 +280,7 @@ fun LoginView(navController: NavHostController, preferencesManager: PreferencesM
                                     Log.d("LOGIN", "Saved userId = $memberId")
                                     preferencesManager.saveKey("userRole", authResult.user.userRole.lowercase())
                                     Log.d("LOGIN", "Saved userRole = ${authResult.user.userRole.lowercase()}")
-                                    preferencesManager.saveUsername("user", username)
+                                    preferencesManager.saveUsername("user", email)
                                     preferencesManager.savePassword("pass", password)
 
                                     // 3. Navigate into your MainActivity‑hosted NavHost

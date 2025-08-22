@@ -1,6 +1,5 @@
 package com.project.repository.imageupload
 
-import com.project.models.imageupload.ImageUploadResponse
 import com.project.models.imageupload.ImageRepository
 import com.project.repository.RetrofitClient
 import com.project.repository.SessionManager

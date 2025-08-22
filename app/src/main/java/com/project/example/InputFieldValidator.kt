@@ -130,11 +130,7 @@ object InputFieldValidator {
                 else -> "Your password is successfully changed. Please check your E-mail."
             }
             isRegistrationView -> when {
-                isUsernameError -> "Enter valid username"
-                isFirstNameError -> "Enter valid first name"
-                isLastNameError -> "Enter valid last name"
                 isEmailError -> "Enter valid email"
-                isMobileNumberError -> "Enter valid phone number"
                 isPasswordError -> "Please create a valid password that is eight characters long, and includes one uppercase letter, one lowercase letter, one number, and one special character"
                 confirmPassword.isEmpty() -> "Confirm Password field is empty, enter a valid password"
                 isConfirmPasswordError -> "Password did not match"

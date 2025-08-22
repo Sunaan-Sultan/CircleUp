@@ -55,9 +55,12 @@ dependencies {
     implementation(libs.coil.compose)
     implementation libs.coil.kt.coil.compose
 
+    implementation libs.ui
     implementation libs.androidx.ui
     implementation libs.androidx.ui.graphics
     implementation libs.androidx.ui.tooling.preview
+    implementation libs.androidx.material3.v120
+    implementation libs.androidx.foundation.v150
     implementation libs.androidx.material3
     implementation libs.androidx.storage
     implementation libs.kotlinx.serialization.json

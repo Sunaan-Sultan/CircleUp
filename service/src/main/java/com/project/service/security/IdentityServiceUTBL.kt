@@ -1,5 +1,7 @@
 package com.project.service.security
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.project.repository.security.IdentityRepositoryImpl
 import com.project.models.security.IdentityService
 import com.project.models.users.User
@@ -9,6 +11,7 @@ class IdentityServiceUTBL : IdentityService {
         TODO("Not yet implemented")
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun authenticate(username: String, password: String): Boolean {
         val userRepository = IdentityRepositoryImpl()
         val apiResponse = userRepository.getToken(username, password)
@@ -33,13 +36,7 @@ class IdentityServiceUTBL : IdentityService {
     }
 
     override fun registered(
-        username: String,
-        firstname: String,
-        lastname: String,
         email: String,
-        mobileNumber: String,
-        gid: String,
-        dob: String,
         password: String,
         confirmPassword: String,
     ): Boolean {

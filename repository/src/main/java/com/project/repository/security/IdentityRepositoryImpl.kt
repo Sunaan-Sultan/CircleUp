@@ -87,13 +87,7 @@ class IdentityRepositoryImpl : IdentityRepository {
     }
 
     override fun getRegistrationToken(
-        username: String,
-        firstname: String,
-        lastname: String,
         email: String,
-        mobileNumber: String,
-        gid: String,
-        dob: String,
         password: String,
         confirmPassword: String
     ): String {
@@ -104,14 +98,8 @@ class IdentityRepositoryImpl : IdentityRepository {
         runBlocking {
             try {
                 val registrationRequest = RegistrationRequest(
-                    username = username,
-                    password = password,
-                    firstname = firstname,
-                    lastname = lastname,
                     email = email,
-                    mobile = mobileNumber,
-                    gid = gid,
-                    dob = dob
+                    password = password
                 )
                 val response = RetrofitClient.registrationApi.registerUser(registrationRequest = registrationRequest)
                 if (response.isSuccessful) {

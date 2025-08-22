@@ -29,26 +29,22 @@ class IdentityLocalRepositoryImpl(context: Context) : IdentityRepository {
         }
     }
 
-//    private val identityList = listOf(
-//        Identity("medico", "Medi@123"),
-//    )
-
     override fun userExists(email: String): Boolean {
-        return users.any { it.username == email }
+        return users.any { it.email == email }
     }
 
-    override fun getToken(username: String, password: String): String {
-        val user = users.find { it.username == username }
+    override fun getToken(email: String, password: String): String {
+        val user = users.find { it.email == email }
         return if (user != null && user.password == password) {
             // return a dummy string as token.
-            "valid_token_for_${user.username}"
+            "valid_token_for_${user.email}"
         } else {
             ""
         }
     }
 
     override fun getUser(email: String): User? {
-        return users.find { it.username == email }
+        return users.find { it.email == email }
     }
 
     override fun getBiometricRegistrationToken(username: String, password: String): String {
@@ -70,13 +66,7 @@ class IdentityLocalRepositoryImpl(context: Context) : IdentityRepository {
     }
 
     override fun getRegistrationToken(
-        username: String,
-        firstname: String,
-        lastname: String,
         email: String,
-        mobileNumber: String,
-        gid: String,
-        dob: String,
         password: String,
         confirmPassword: String,
     ): String {

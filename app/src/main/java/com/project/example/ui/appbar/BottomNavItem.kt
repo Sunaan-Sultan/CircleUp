@@ -5,19 +5,18 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.project.example.ui.home.DisplayPosts
 import com.project.example.PreferencesManager
 import com.project.example.ui.forgetPassword.ForgetPasswordScreen
-import com.project.example.ui.home.HomeScreen
 import com.project.example.ui.login.LoginScreen
 import com.project.example.ui.profile.BioDataScreen
 import com.project.example.ui.profile.ProfileScreen
@@ -25,8 +24,8 @@ import com.project.example.ui.profile.ProfileView
 import com.project.example.ui.registration.RegistrationScreen
 
 sealed class BottomNavItem(val route: String, val label: String, val icon: ImageVector) {
-    object Home    : BottomNavItem("home",    "Home",    Icons.Filled.Home)
-    object Product : BottomNavItem("products","Product", Icons.Filled.ShoppingCart)
+    object Home    : BottomNavItem("home", "Home", Icons.Filled.Home)
+    object Product : BottomNavItem("favourites","Favourites", Icons.Filled.Favorite)
     object Profile : BottomNavItem("profile", "Profile", Icons.Filled.Person)
 }
 
@@ -47,10 +46,12 @@ fun Navigation(
             LoginScreen(navController, preferencesManager)
         }
         composable("home") {
-            HomeScreen(context = LocalContext.current)
+            DisplayPosts()
+        }
+        composable("favourites") {
+            DisplayPosts()
         }
 
-        // Profile & misc
         composable("profile")      { ProfileScreen(navController) }
         composable("bio")          { BioDataScreen(navController) }
         composable("profile-info") { ProfileView(navController) }

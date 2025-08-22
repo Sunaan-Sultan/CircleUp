@@ -1,5 +1,7 @@
-package com.project.models.security
+package com.project.repository
 
+import com.project.models.security.RegistrationRequest
+import com.project.models.security.RegistrationResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
