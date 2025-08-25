@@ -1,42 +1,51 @@
 package com.project.example.ui.home
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.project.models.posts.Post
+import com.project.repository.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayPosts(
-    viewModel: PostsViewModel = viewModel()
+    context: Context? = null,
+    viewModel: PostsViewModel = viewModel { PostsViewModel(context) }
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
-    var searchQuery by remember { mutableStateOf("") }
+    val searchQuery = uiState.uiSearchQuery
 
-    // Reset scroll position when search results change
+    uiState.error?.let { error ->
+        LaunchedEffect(error) {
+            viewModel.clearError()
+        }
+    }
+
     LaunchedEffect(uiState.searchQuery) {
         if (uiState.searchQuery.isNotEmpty()) {
             listState.animateScrollToItem(0)
         }
     }
 
-    // Trigger pagination when reaching near end (only for non-search mode)
     LaunchedEffect(listState, uiState.searchQuery) {
         if (uiState.searchQuery.isEmpty()) {
             snapshotFlow {
@@ -66,15 +75,13 @@ fun DisplayPosts(
             title = { Text("Posts") }
         )
 
-        // Search Bar
         SearchBar(
             query = searchQuery,
             onQueryChange = { newQuery ->
-                searchQuery = newQuery
+                viewModel.updateUISearchQuery(newQuery)
                 viewModel.searchPosts(newQuery)
             },
             onClearSearch = {
-                searchQuery = ""
                 viewModel.clearSearch()
             }
         )
@@ -82,13 +89,33 @@ fun DisplayPosts(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        if (uiState.isOffline) {
+            OfflineIndicator(
+                hasCachedData = uiState.hasCachedData,
+                onRefresh = { viewModel.refreshData() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
         when {
             uiState.isLoading && uiState.displayedPosts.isEmpty() -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CircularProgressIndicator()
+                        if (uiState.isOffline) {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Loading cached posts...",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                 }
             }
 
@@ -133,10 +160,9 @@ fun DisplayPosts(
             }
 
             else -> {
-                // Show search results count
                 if (uiState.searchQuery.isNotEmpty()) {
                     Text(
-                        text = "${uiState.displayedPosts.size} results found",
+                        text = "${uiState.displayedPosts.size} results found${if (uiState.isOffline) " (cached)" else ""}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -150,12 +176,12 @@ fun DisplayPosts(
                     items(uiState.displayedPosts) { post ->
                         PostItem(
                             post = post,
-                            searchQuery = uiState.searchQuery
+                            searchQuery = uiState.searchQuery,
+                            onFavoriteClick = { viewModel.toggleFavorite(post) }
                         )
                     }
 
-                    // Only show loading indicator for pagination (not search)
-                    if (uiState.isLoading && uiState.searchQuery.isEmpty()) {
+                    if (uiState.isLoading && uiState.searchQuery.isEmpty() && !uiState.isOffline) {
                         item {
                             Box(
                                 modifier = Modifier
@@ -167,7 +193,105 @@ fun DisplayPosts(
                             }
                         }
                     }
+
+                    if (uiState.isOffline && uiState.displayedPosts.isNotEmpty()) {
+                        item {
+                            OfflineBadge()
+                        }
+                    }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun OfflineIndicator(
+    hasCachedData: Boolean,
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.cloudoffline),
+                    contentDescription = "Offline",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Column {
+                    Text(
+                        text = "You're offline",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        text = if (hasCachedData) {
+                            "Showing cached posts"
+                        } else {
+                            "No cached data available"
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            TextButton(
+                onClick = onRefresh
+            ) {
+                Text("Refresh")
+            }
+        }
+    }
+}
+
+@Composable
+fun OfflineBadge(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.cloudoffline),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Cached content",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
@@ -209,6 +333,7 @@ fun SearchBar(
 fun PostItem(
     post: Post,
     searchQuery: String = "",
+    onFavoriteClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -218,12 +343,46 @@ fun PostItem(
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            HighlightedText(
-                text = post.title,
-                searchQuery = searchQuery,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    HighlightedText(
+                        text = post.title,
+                        searchQuery = searchQuery,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                IconButton(
+                    onClick = onFavoriteClick,
+                    modifier = Modifier.padding(start = 8.dp)
+                ) {
+                    Icon(
+                        imageVector = if (post.isFavorite) {
+                            Icons.Filled.Favorite
+                        } else {
+                            Icons.Filled.FavoriteBorder
+                        },
+                        contentDescription = if (post.isFavorite) {
+                            "Remove from favorites"
+                        } else {
+                            "Add to favorites"
+                        },
+                        tint = if (post.isFavorite) {
+                            MaterialTheme.colorScheme.error
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        }
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
             HighlightedText(
                 text = post.body,
@@ -238,7 +397,7 @@ fun PostItem(
 fun HighlightedText(
     text: String,
     searchQuery: String,
-    style: TextStyle = MaterialTheme.typography.bodyMedium,
+    style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
     fontWeight: FontWeight? = null,
     modifier: Modifier = Modifier
 ) {
@@ -262,12 +421,10 @@ fun HighlightedText(
                     break
                 }
 
-                // Add text before match
                 if (index > startIndex) {
                     append(text.substring(startIndex, index))
                 }
 
-                // Add highlighted match
                 withStyle(
                     style = SpanStyle(
                         background = MaterialTheme.colorScheme.primaryContainer,

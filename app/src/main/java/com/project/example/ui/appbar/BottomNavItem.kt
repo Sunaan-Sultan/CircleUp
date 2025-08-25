@@ -1,9 +1,11 @@
 package com.project.example.ui.appbar
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -14,18 +16,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.project.example.ui.home.DisplayPosts
 import com.project.example.PreferencesManager
-import com.project.example.ui.forgetPassword.ForgetPasswordScreen
+import com.project.example.ui.favourites.Favourites
+import com.project.example.ui.home.DisplayPosts
 import com.project.example.ui.login.LoginScreen
-import com.project.example.ui.profile.BioDataScreen
 import com.project.example.ui.profile.ProfileScreen
-import com.project.example.ui.profile.ProfileView
 import com.project.example.ui.registration.RegistrationScreen
 
 sealed class BottomNavItem(val route: String, val label: String, val icon: ImageVector) {
     object Home    : BottomNavItem("home", "Home", Icons.Filled.Home)
-    object Product : BottomNavItem("favourites","Favourites", Icons.Filled.Favorite)
+    object Favourites : BottomNavItem("favourites","Favourites", Icons.Filled.Favorite)
     object Profile : BottomNavItem("profile", "Profile", Icons.Filled.Person)
 }
 
@@ -36,6 +36,7 @@ fun Navigation(
     innerPadding: PaddingValues,
     startDestination: String,
     preferencesManager: PreferencesManager,
+    context: Context? = null
 ) {
     NavHost(
         navController    = navController,
@@ -45,23 +46,25 @@ fun Navigation(
         composable("login") {
             LoginScreen(navController, preferencesManager)
         }
+
         composable("home") {
-            DisplayPosts()
-        }
-        composable("favourites") {
-            DisplayPosts()
+            DisplayPosts(context = context)
         }
 
-        composable("profile")      { ProfileScreen(navController) }
-        composable("bio")          { BioDataScreen(navController) }
-        composable("profile-info") { ProfileView(navController) }
+        composable("favourites") {
+            if (context != null) {
+                Favourites(context = context)
+            } else {
+                Text("Context not available")
+            }
+        }
+
+        composable("profile"){
+            ProfileScreen(navController)
+        }
 
         composable("registration") {
             RegistrationScreen(navController)
-        }
-
-        composable("forgetPassword") {
-            ForgetPasswordScreen(navController)
         }
     }
 }

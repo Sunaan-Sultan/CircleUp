@@ -2,7 +2,6 @@ package com.project.example.ui.login
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -17,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ListItemDefaults.contentColor
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
@@ -27,10 +27,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -39,15 +38,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.project.example.isWithinMaxCharLimit
 import com.project.example.PreferencesManager
+import com.project.example.isWithinMaxCharLimit
 import com.project.example.ui.snackbar.CustomSnackbarVisuals
 import com.project.example.ui.theme.AppTheme
 import com.project.example.ui.theme.BackgroundColor
 import com.project.example.ui.theme.CircleUpTheme
 import com.project.example.ui.theme.Orientation
 import com.project.example.ui.theme.PrimaryColor2
-import com.project.example.ui.theme.getCardColors
 import com.project.example.ui.theme.rememberWindowSizeClass
 import com.project.repository.R
 import kotlinx.coroutines.launch
@@ -57,20 +55,14 @@ import kotlinx.coroutines.launch
 fun LoginView(navController: NavHostController, preferencesManager: PreferencesManager) {
     var email by remember { mutableStateOf(preferencesManager.getKey("email", "")) }
     var password by remember { mutableStateOf(preferencesManager.getKey("password", "")) }
-    var isForgetClicked by remember { mutableStateOf(false) }
     var checked by remember { mutableStateOf(email.isNotEmpty() && password.isNotEmpty()) }
     var passwordVisible by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
 
     val context = LocalContext.current
-    val placeholderTextColor = if (isSystemInDarkTheme()) Color(0x83F1F3F4) else Color.DarkGray
-    val (backgroundColor, contentColor) = getCardColors()
-    val fingerButton = if (isSystemInDarkTheme()) Color(0xFF283138) else Color.White
     val preferencesManager = PreferencesManager(context)
-    val getpreferenceData = preferencesManager.getKey("RegistrationKey", "default_value")
     val scaffoldState = rememberScaffoldState()
-    val coroutineScope = rememberCoroutineScope()
-    val keyboardController = LocalSoftwareKeyboardController.current
     val snackbarHostState = remember { SnackbarHostState() }
 
     val window = rememberWindowSizeClass()
@@ -250,31 +242,16 @@ fun LoginView(navController: NavHostController, preferencesManager: PreferencesM
                         }
 
                         Spacer(modifier = Modifier.weight(1f))
-                        val hyperlinkStyle = TextStyle(
-                            color = PrimaryColor2,
-                            fontSize = 16.sp,
-                            textDecoration = TextDecoration.Underline,
-                        )
-
-                        ClickableText(
-                            text = AnnotatedString("Forget Password?"),
-                            onClick = {
-                                navController.navigate("forgetPassword")
-                            },
-                            style = hyperlinkStyle,
-
-                            )
                     }
 
                     Button(
                         onClick = {
+                            focusManager.clearFocus()
                             val loginBean = LoginPresenter(context)
-                            // Perform login authentication
                             val authResult = loginBean.login(email, password)
 
                             when (authResult) {
                                 is AuthResult.Success -> {
-                                    // 2. Save into prefs
                                     val memberId = authResult.user.id.toString()
                                     preferencesManager.saveKey("userId", memberId)
                                     Log.d("LOGIN", "Saved userId = $memberId")
@@ -283,9 +260,7 @@ fun LoginView(navController: NavHostController, preferencesManager: PreferencesM
                                     preferencesManager.saveUsername("user", email)
                                     preferencesManager.savePassword("pass", password)
 
-                                    // 3. Navigate into your MainActivity‑hosted NavHost
                                     navController.navigate("home") {
-                                        // remove the login screen from backstack
                                         popUpTo("login") { inclusive = true }
                                         launchSingleTop = true
                                     }

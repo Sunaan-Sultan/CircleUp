@@ -8,21 +8,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.project.repository.R
 
-// Define your custom font family
 val capitaFontFamily = FontFamily(
     Font(R.font.roboto_bold, FontWeight.Bold),
     Font(R.font.roboto_light, FontWeight.Normal),
     Font(R.font.roboto_medium, FontWeight.Medium),
 )
 
-// Define your base Typography for Material 3
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = capitaFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
     ),
-    // Override other text styles as needed
+
     bodyMedium = TextStyle(
         fontFamily = capitaFontFamily,
         fontWeight = FontWeight.Normal,
@@ -38,10 +36,9 @@ val Typography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
     ),
-    // Add more styles as needed
+
 )
 
-// Define typography for different screen sizes
 val typographySmall = Typography(
     bodyLarge = TextStyle(
         fontFamily = capitaFontFamily,

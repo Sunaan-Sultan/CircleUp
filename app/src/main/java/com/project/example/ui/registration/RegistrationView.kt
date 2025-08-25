@@ -101,7 +101,7 @@ fun RegistrationView(navController: NavHostController) {
             .background(if (isSystemInDarkTheme()) BackgroundColor else Color.White)
             .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
             value = email,
             onValueChange = {
@@ -126,7 +126,7 @@ fun RegistrationView(navController: NavHostController) {
                 ),
             modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         OutlinedTextField(
             value = password,
@@ -165,7 +165,7 @@ fun RegistrationView(navController: NavHostController) {
             },
             modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         OutlinedTextField(
             value = confirmPassword,
@@ -208,20 +208,7 @@ fun RegistrationView(navController: NavHostController) {
         )
         Button(
             onClick = {
-                if (isValidationSuccess) {
-                    val registrationBean = RegistrationPresenter()
-                    val response = registrationBean.registration(
-                        context,
-                        email,
-                        password,
-                        confirmPassword,
-                    )
-                    if (response) {
-                        isValidationErrorDialogVisible = true
-                    }
-                } else {
                     isValidationErrorDialogVisible = true
-                }
             },
             modifier = Modifier
                 .fillMaxWidth()

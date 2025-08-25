@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id 'org.jetbrains.kotlin.plugin.serialization' version '2.1.0'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -90,4 +91,5 @@ dependencies {
     //retrofit
     implementation libs.retrofit
     implementation libs.converter.gson
+
 }

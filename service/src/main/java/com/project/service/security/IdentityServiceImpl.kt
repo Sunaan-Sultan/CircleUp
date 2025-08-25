@@ -16,34 +16,6 @@ class IdentityServiceImpl(private val context: Context) : IdentityService {
         return identityRepository.getUser(username)
     }
 
-    override fun biometricRegistered(username: String, password: String): String {
-        val identityRepository = SecurityFactory.getIdentityRepository(context)
-        return identityRepository.getBiometricRegistrationToken(username, password)
-    }
-    override fun passwordRecovery(
-        username: String,
-        dateOfBirth: String,
-        mobileNumber: String,
-        email: String,
-    ): Boolean {
-        val identityRepository = SecurityFactory.getIdentityRepository(context)
-        return identityRepository.getPasswordRecoveryToken(username, dateOfBirth, mobileNumber, email)
-    }
-
-    override fun registered(
-        email: String,
-        password: String,
-        confirmPassword: String,
-    ): Boolean {
-        val identityRepository = SecurityFactory.getIdentityRepository(context)
-        val identityResponse = identityRepository.getRegistrationToken(
-            email,
-            password,
-            confirmPassword
-        )
-        return identityResponse.isNotEmpty()
-    }
-
 
     override fun userExists(username: String): Boolean {
         val identityRepository = SecurityFactory.getIdentityRepository(context)

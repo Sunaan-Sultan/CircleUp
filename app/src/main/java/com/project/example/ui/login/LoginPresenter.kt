@@ -12,14 +12,12 @@ import com.project.example.ui.theme.rememberWindowSizeClass
 import com.project.models.users.User
 import com.project.service.security.SecurityFactory
 
-// Sealed class to represent different authentication results
 sealed class AuthResult {
     data class Success(val user: User) : AuthResult()
     object InvalidUsername : AuthResult()
     object InvalidPassword : AuthResult()
 }
 
-// Presenter class for handling login functionality
 class LoginPresenter(private val context: Context) {
     /**
      * Performs login authentication.

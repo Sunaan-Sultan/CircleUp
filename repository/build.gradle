@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id 'kotlin-kapt'
 }
 
 android {
@@ -46,6 +47,11 @@ dependencies {
     //retrofit
     implementation libs.retrofit
     implementation libs.converter.gson
+
+    //Room
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx.v250
+    kapt "androidx.room:room-compiler:2.7.2"
 
     def ktor_version="2.3.5"
     implementation "io.ktor:ktor-client-core:$ktor_version"

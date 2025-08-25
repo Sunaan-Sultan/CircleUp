@@ -70,6 +70,9 @@ material3Version = "1.2.0"
 materialVersion = "1.11.0"
 navigationCompose = "2.8.4"
 retrofit = "(insert latest version)"
+roomKtx = "2.7.2"
+roomKtxVersion = "2.5.0"
+roomRuntime = "2.7.2"
 runtime = "2.0.0"
 sqliteDriver = "2.0.0"
 storage = "1.5.0"
@@ -89,6 +92,9 @@ androidx-foundation-v150 = { module = "androidx.compose.foundation:foundation", 
 androidx-material = { module = "androidx.compose.material:material", version.ref = "androidxMaterial" }
 androidx-material3-v120 = { module = "androidx.compose.material3:material3", version.ref = "material3Version" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+androidx-room-ktx-v250 = { module = "androidx.room:room-ktx", version.ref = "roomKtxVersion" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }

@@ -11,14 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.project.repository.R
-import com.project.example.ui.theme.BackgroundColor
 import com.project.example.ui.appbar.AppBar
+import com.project.example.ui.theme.BackgroundColor
 import com.project.example.ui.theme.CircleUpTheme
 import com.project.example.ui.theme.rememberWindowSizeClass
 

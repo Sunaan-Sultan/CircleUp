@@ -12,22 +12,14 @@ import com.project.service.RuntimeProfile.LIVE_RUNTIME
 object SecurityFactory {
 
     fun getIdentityService(context: Context, name: String): IdentityService {
-        return if (name == "UTBL") {
-            IdentityServiceUTBL()
-        } else {
-            IdentityServiceImpl(context)
-        }
+           return IdentityServiceImpl(context)
     }
 
-//    fun getIdentityService(): IdentityService {
-//        return getIdentityService("KEY")
-//    }
-
     fun getIdentityRepository(context: Context): IdentityRepository {
-        if (RuntimeProfile.getCurrentRuntime() == LIVE_RUNTIME) {
-            return IdentityRepositoryImpl()
+        return if (RuntimeProfile.getCurrentRuntime() == LIVE_RUNTIME) {
+            IdentityRepositoryImpl()
         } else {
-            return IdentityLocalRepositoryImpl(context)
+            IdentityLocalRepositoryImpl(context)
         }
     }
 }

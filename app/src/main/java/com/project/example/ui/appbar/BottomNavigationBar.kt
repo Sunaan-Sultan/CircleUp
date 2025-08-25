@@ -19,7 +19,7 @@ import com.project.example.ui.theme.unselectedIconColor
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         BottomNavItem.Home,
-        BottomNavItem.Product,
+        BottomNavItem.Favourites,
         BottomNavItem.Profile
     )
 
@@ -33,7 +33,6 @@ fun BottomNavigationBar(navController: NavHostController) {
                 onClick = {
                     if (currentRoute != item.route) {
                         navController.navigate(item.route) {
-                            // Clear back stack to prevent duplicates
                             popUpTo(navController.graph.startDestinationId) {
                                 saveState = true
                             }

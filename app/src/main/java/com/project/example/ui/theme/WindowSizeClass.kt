@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 
-// sealed class to represent different window sizes
 sealed class WindowSize(val size: Int) {
 
     data class Small(val smallSize: Int) : WindowSize(smallSize)
@@ -16,7 +15,6 @@ sealed class WindowSize(val size: Int) {
     data class Large(val largeSize: Int) : WindowSize(largeSize)
 }
 
-// Data class to represent the size of the window in both width and height
 data class WindowSizeClass(
     val width: WindowSize,
     val height: WindowSize,
@@ -34,7 +32,6 @@ fun rememberWindowSizeClass(): WindowSizeClass {
         mutableStateOf(config.screenHeightDp)
     }
 
-    // Determine the window width class based on the width
     val windowWidthClass = when {
         width <= 360 -> WindowSize.Small(width)
         width in 361..480 -> WindowSize.Compact(width)
@@ -42,7 +39,6 @@ fun rememberWindowSizeClass(): WindowSizeClass {
         else -> WindowSize.Large(width)
     }
 
-    // Determine the window height class based on the height
     val windowHeightClass = when {
         height <= 480 -> WindowSize.Small(height)
         height in 481..639 -> WindowSize.SemiCompact(height)
