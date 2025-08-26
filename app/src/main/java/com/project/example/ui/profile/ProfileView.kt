@@ -16,12 +16,10 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,7 +38,8 @@ import com.project.example.PreferencesManager
 import com.project.example.ui.theme.BackgroundColor2
 import com.project.example.ui.theme.PrimaryColor
 import com.project.example.ui.theme.White
-import com.project.repository.SessionManager
+import com.project.repository.security.SessionManager
+import com.project.service.security.AuthenticationService
 
 @Composable
 fun ProfileScreen(navController: NavHostController) {
@@ -49,6 +48,7 @@ fun ProfileScreen(navController: NavHostController) {
     val bitmapImage = remember { mutableStateOf<Bitmap?>(null) }
     var showDialog by remember { mutableStateOf(false) }
     val prefs = PreferencesManager(context)
+    val authService = AuthenticationService(context)
 
     Scaffold { padding ->
         val scrollState = rememberScrollState()
@@ -187,10 +187,7 @@ fun ProfileScreen(navController: NavHostController) {
                                 )
                             },
                             onClick = {
-                                prefs.removeKey("userRole")
-                                prefs.removeUsername("user")
-                                prefs.removePassword("pass")
-                                SessionManager.loginData = null
+                                authService.logout()
                                 navController.navigate("login") {
                                     popUpTo("home") { inclusive = true }
                                     launchSingleTop = true

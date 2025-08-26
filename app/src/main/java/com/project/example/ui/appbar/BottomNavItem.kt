@@ -3,6 +3,11 @@ package com.project.example.ui.appbar
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -21,7 +26,7 @@ import com.project.example.ui.favourites.Favourites
 import com.project.example.ui.home.DisplayPosts
 import com.project.example.ui.login.LoginScreen
 import com.project.example.ui.profile.ProfileScreen
-import com.project.example.ui.registration.RegistrationScreen
+import com.project.example.ui.registration.RegistrationView
 
 sealed class BottomNavItem(val route: String, val label: String, val icon: ImageVector) {
     object Home    : BottomNavItem("home", "Home", Icons.Filled.Home)
@@ -41,7 +46,19 @@ fun Navigation(
     NavHost(
         navController    = navController,
         startDestination = startDestination,
-        modifier         = Modifier.padding(innerPadding)
+        modifier         = Modifier.padding(innerPadding),
+        enterTransition = {
+            fadeIn(animationSpec = tween(220, delayMillis = 90))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(90))
+        },
+        popEnterTransition = {
+            fadeIn(animationSpec = tween(220, delayMillis = 90))
+        },
+        popExitTransition = {
+            fadeOut(animationSpec = tween(90))
+        }
     ) {
         composable("login") {
             LoginScreen(navController, preferencesManager)
@@ -64,7 +81,7 @@ fun Navigation(
         }
 
         composable("registration") {
-            RegistrationScreen(navController)
+            RegistrationView(navController)
         }
     }
 }

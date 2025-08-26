@@ -1,5 +1,5 @@
 #[versions]
-#agp = "8.7.2"
+#agp = "8.6.1"
 #kotlin = "2.0.0"
 #coreKtx = "1.16.0"
 #junit = "4.13.2"
@@ -37,7 +37,7 @@
 #
 
 [versions]
-agp = "8.7.2"
+agp = "8.6.1"
 androidDriver = "2.0.0"
 androidxMaterial = "1.7.7"
 appcompatVersion = "1.6.1"

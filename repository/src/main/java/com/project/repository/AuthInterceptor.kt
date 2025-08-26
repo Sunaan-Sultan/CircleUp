@@ -1,5 +1,6 @@
 package com.project.repository
 
+import com.project.repository.security.SessionManager
 import okhttp3.Interceptor
 import okhttp3.Response
 

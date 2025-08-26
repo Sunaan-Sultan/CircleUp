@@ -15,7 +15,6 @@ import com.project.example.ui.appbar.BottomNavigationBar
 import com.project.example.ui.appbar.Navigation
 import com.project.example.ui.theme.CircleUpTheme
 import com.project.example.ui.theme.rememberWindowSizeClass
-import kotlinx.coroutines.runBlocking
 
 class MainActivity : FragmentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -41,13 +40,21 @@ class MainActivity : FragmentActivity() {
             val navBackStackEntry = navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry.value?.destination?.route
 
-            val hideOn = listOf("login", "registration", "forgetPassword")
-            val shouldShowBars = currentRoute != null && currentRoute !in hideOn
+            // Routes where both topbar and bottombar should be hidden
+            val hideAllBars = listOf("login")
+
+            // Routes where only bottombar should be hidden (topbar visible)
+            val hideBottomBarOnly = listOf("registration")
+
+            val shouldShowTopBar = currentRoute != null && currentRoute !in hideAllBars
+            val shouldShowBottomBar = currentRoute != null &&
+                    currentRoute !in hideAllBars &&
+                    currentRoute !in hideBottomBarOnly
 
             val window = rememberWindowSizeClass()
 
             CircleUpTheme(window) {
-                if (shouldShowBars) {
+                if (shouldShowTopBar) {
                     Scaffold(
                         topBar = {
                             AppBar(
@@ -59,18 +66,20 @@ class MainActivity : FragmentActivity() {
                                     "bio" -> "Update Profile"
                                     "posts" -> "Posts"
                                     "favourites" -> "Favorites"
+                                    "registration" -> "Sign Up"
                                     else -> "Circle UP"
                                 },
                                 showCartIcon = false,
-                                showBackButton = currentRoute == "myCart",
+                                showBackButton = currentRoute in listOf("myCart", "registration"),
                                 navController = navController
                             )
                         },
                         bottomBar = {
-                            BottomNavigationBar(navController)
-                        },
-
-                        ) { innerPadding ->
+                            if (shouldShowBottomBar) {
+                                BottomNavigationBar(navController)
+                            }
+                        }
+                    ) { innerPadding ->
                         Navigation(
                             navController = navController,
                             innerPadding = innerPadding,

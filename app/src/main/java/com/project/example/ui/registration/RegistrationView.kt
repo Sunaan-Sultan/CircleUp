@@ -7,305 +7,347 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.material3.Text
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.project.example.isWithinMaxCharLimit
-import com.project.repository.R
+import com.project.example.ui.theme.AppTheme
+import com.project.example.ui.theme.BackgroundColor
 import com.project.example.ui.theme.PrimaryColor
 import com.project.example.ui.theme.White
 import com.project.example.ui.theme.getCardColors
-import com.project.example.InputFieldValidator.validateFields
-import com.project.example.ui.theme.AppTheme
-import com.project.example.ui.theme.BackgroundColor
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import com.project.repository.R
 
 @Composable
-fun RegistrationView(navController: NavHostController) {
-    var username by remember { mutableStateOf("") }
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var mobileNumber by remember { mutableStateOf("") }
-    var nid by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var dob by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var isValidationErrorDialogVisible by remember { mutableStateOf(false) }
-    var isBirthdayError by remember {
-        mutableStateOf(false)
-    }
-    val dateDialogState = rememberMaterialDialogState()
-    val context = LocalContext.current
-
-    val (isValidationSuccess, errorMessage) = validateFields(
-        username,
-        firstName,
-        lastName,
-        email,
-        mobileNumber,
-        nid,
-        dob,
-        password,
-        confirmPassword,
-        null,
-
-        isForgetPasswordView = false,
-        isRegistrationView = true,
-        isBiometricRegistrationView = false,
-        isBiometricFingerprintRegistrationView = false,
-    )
-
-    var passwordVisible by remember { mutableStateOf(false) }
-    var confirmPasswordVisible by remember { mutableStateOf(false) }
-
+fun RegistrationView(
+    navController: NavHostController,
+    viewModel: RegistrationViewModel = viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
     val (backgroundColor, contentColor) = getCardColors()
+    val textColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
-    val isDarkTheme = isSystemInDarkTheme()
-    val textColor = if (isDarkTheme) Color.White else Color.Black
-
-    Column(
+    Box(
         modifier = Modifier
-            .padding(
-                //top = AppTheme.dimens.,
-                start = AppTheme.dimens.large,
-                end = AppTheme.dimens.large,
-            )
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(if (isSystemInDarkTheme()) BackgroundColor else Color.White)
-            .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
-        OutlinedTextField(
-            value = email,
-            onValueChange = {
-                if (isWithinMaxCharLimit(it, 40)) {
-                    email = it
-                }
-            },
-            placeholder = { Text("example@gmail.com", color = contentColor) },
-            label = { Text("Email", color = contentColor) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = contentColor,
-                unfocusedLabelColor = contentColor,
-                focusedLabelColor = contentColor,
-                unfocusedBorderColor = contentColor,
-                focusedBorderColor = contentColor,
-                cursorColor = contentColor,
-                leadingIconColor = contentColor,
-                placeholderColor = contentColor,
-
-                ),
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = {
-                if (isWithinMaxCharLimit(it, 20)) {
-                    password = it
-                }
-            },
-            placeholder = { Text("Enter Password", color = contentColor) },
-            label = { Text("Password", color = contentColor) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            singleLine = true,
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = contentColor,
-                unfocusedLabelColor = contentColor,
-                focusedLabelColor = contentColor,
-                unfocusedBorderColor = contentColor,
-                focusedBorderColor = contentColor,
-                cursorColor = contentColor,
-                leadingIconColor = contentColor,
-                placeholderColor = contentColor,
-
-                ),
-            trailingIcon = {
-                val visibilityIcon =
-                    if (passwordVisible) R.drawable.baseline_visibility_off_24 else R.drawable.baseline_visibility_24
-                val visibilityIconContentDescription =
-                    if (passwordVisible) "Hide password" else "Show password"
-                Icon(
-                    painter = painterResource(id = visibilityIcon),
-                    contentDescription = visibilityIconContentDescription,
-                    modifier = Modifier.clickable { passwordVisible = !passwordVisible },
-                    tint = textColor,
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-
-        OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = {
-                if (isWithinMaxCharLimit(it, 20)) {
-                    confirmPassword = it
-                }
-            },
-            placeholder = { Text("Enter password again", color = contentColor) },
-            label = { Text("Confirm Password", color = contentColor) },
-            visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = contentColor,
-                unfocusedLabelColor = contentColor,
-                focusedLabelColor = contentColor,
-                unfocusedBorderColor = contentColor,
-                focusedBorderColor = contentColor,
-                cursorColor = contentColor,
-                leadingIconColor = contentColor,
-                placeholderColor = contentColor,
-
-                ),
-            trailingIcon = {
-                val visibilityIcon =
-                    if (confirmPasswordVisible) R.drawable.baseline_visibility_off_24 else R.drawable.baseline_visibility_24
-                val visibilityIconContentDescription =
-                    if (confirmPasswordVisible) "Hide password" else "Show password"
-                Icon(
-                    painter = painterResource(id = visibilityIcon),
-                    contentDescription = visibilityIconContentDescription,
-                    modifier = Modifier.clickable {
-                        confirmPasswordVisible = !confirmPasswordVisible
-                    },
-                    tint = textColor,
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Button(
-            onClick = {
-                    isValidationErrorDialogVisible = true
-            },
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp),
-
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = PrimaryColor,
-                contentColor = White,
-            ),
-            shape = RoundedCornerShape(20.dp),
+                .fillMaxSize()
+                .padding(horizontal = AppTheme.dimens.large)
+                .verticalScroll(rememberScrollState())
         ) {
-            Text(
-                text = "Sign Up",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(5.dp),
-                color = Color.White,
+            Spacer(modifier = Modifier.height(32.dp))
+
+            EmailField(
+                email = uiState.email,
+                onEmailChange = viewModel::onEmailChanged,
+                contentColor = contentColor,
+                enabled = !uiState.isLoading
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            PasswordField(
+                password = uiState.password,
+                onPasswordChange = viewModel::onPasswordChanged,
+                isPasswordVisible = uiState.isPasswordVisible,
+                onVisibilityToggle = viewModel::onPasswordVisibilityToggled,
+                contentColor = contentColor,
+                textColor = textColor,
+                label = "Password",
+                placeholder = "Enter Password",
+                enabled = !uiState.isLoading
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            PasswordField(
+                password = uiState.confirmPassword,
+                onPasswordChange = viewModel::onConfirmPasswordChanged,
+                isPasswordVisible = uiState.isConfirmPasswordVisible,
+                onVisibilityToggle = viewModel::onConfirmPasswordVisibilityToggled,
+                contentColor = contentColor,
+                textColor = textColor,
+                label = "Confirm Password",
+                placeholder = "Enter password again",
+                enabled = !uiState.isLoading
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            SignUpButton(
+                onClick = viewModel::onSignUpClicked,
+                isLoading = uiState.isLoading,
+                enabled = !uiState.isLoading
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Dialog should be outside the scrollable content
+        if (uiState.showDialog) {
+            RegistrationDialog(
+                validationResult = uiState.validationResult,
+                isLoading = uiState.isLoading,
+                onDismiss = viewModel::onDialogDismissed,
+                onSuccess = {
+                    viewModel.onDialogDismissed()
+                    navController.navigate("login") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                },
+                backgroundColor = backgroundColor,
+                textColor = textColor
             )
         }
     }
+}
 
-    if (isValidationErrorDialogVisible) {
+// Keep all other composable functions unchanged
+@Composable
+private fun EmailField(
+    email: String,
+    onEmailChange: (String) -> Unit,
+    contentColor: Color,
+    enabled: Boolean = true
+) {
+    OutlinedTextField(
+        value = email,
+        onValueChange = onEmailChange,
+        placeholder = { Text("example@gmail.com", color = contentColor) },
+        label = { Text("Email", color = contentColor) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        singleLine = true,
+        enabled = enabled,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = contentColor,
+            unfocusedLabelColor = contentColor,
+            focusedLabelColor = contentColor,
+            unfocusedBorderColor = contentColor,
+            focusedBorderColor = contentColor,
+            cursorColor = contentColor,
+            placeholderColor = contentColor
+        ),
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+private fun PasswordField(
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    isPasswordVisible: Boolean,
+    onVisibilityToggle: () -> Unit,
+    contentColor: Color,
+    textColor: Color,
+    label: String,
+    placeholder: String,
+    enabled: Boolean = true
+) {
+    OutlinedTextField(
+        value = password,
+        onValueChange = onPasswordChange,
+        placeholder = { Text(placeholder, color = contentColor) },
+        label = { Text(label, color = contentColor) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        singleLine = true,
+        enabled = enabled,
+        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = contentColor,
+            unfocusedLabelColor = contentColor,
+            focusedLabelColor = contentColor,
+            unfocusedBorderColor = contentColor,
+            focusedBorderColor = contentColor,
+            cursorColor = contentColor,
+            placeholderColor = contentColor
+        ),
+        trailingIcon = {
+            Icon(
+                painter = painterResource(if (isPasswordVisible) R.drawable.baseline_visibility_off_24 else R.drawable.baseline_visibility_off_24),
+                contentDescription = if (isPasswordVisible) "Hide password" else "Show password",
+                modifier = Modifier.clickable { onVisibilityToggle() },
+                tint = textColor
+            )
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+private fun SignUpButton(
+    onClick: () -> Unit,
+    isLoading: Boolean = false,
+    enabled: Boolean = true
+) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = PrimaryColor,
+            contentColor = White
+        ),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(16.dp),
+                color = White,
+                strokeWidth = 2.dp
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Registering...", fontSize = 16.sp, color = Color.White)
+        } else {
+            Text(
+                text = "Sign Up",
+                fontSize = 16.sp,
+                modifier = Modifier.padding(8.dp),
+                color = Color.White
+            )
+        }
+    }
+}
+
+@Composable
+private fun RegistrationDialog(
+    validationResult: ValidationResult,
+    isLoading: Boolean,
+    onDismiss: () -> Unit,
+    onSuccess: () -> Unit,
+    backgroundColor: Color,
+    textColor: Color
+) {
+    if (isLoading) {
         AlertDialog(
-            onDismissRequest = {
+            onDismissRequest = { /* Prevent dismissal while loading */ },
+            title = {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = PrimaryColor)
+                }
             },
+            text = {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Creating your account...",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.body1.copy(
+                            fontSize = 16.sp,
+                            color = textColor
+                        )
+                    )
+                }
+            },
+            confirmButton = { /* No button while loading */ },
+            backgroundColor = backgroundColor
+        )
+        return
+    }
+
+    val isSuccess = validationResult is ValidationResult.Success
+    val message = when (validationResult) {
+        is ValidationResult.Success -> "Account has been successfully registered."
+        is ValidationResult.Error -> validationResult.message
+        ValidationResult.None -> ""
+    }
+
+    if (message.isNotEmpty()) {
+        AlertDialog(
+            onDismissRequest = { /* Prevent dismissal by clicking outside */ },
             title = {
                 Image(
-                    painter = if (errorMessage == "Success") {
-                        painterResource(id = R.drawable.success)
-                    } else {
-                        painterResource(id = R.drawable.high_importance_72)
-                    },
+                    painter = painterResource(
+                        id = if (isSuccess) R.drawable.success else R.drawable.high_importance_72
+                    ),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(45.dp),
+                        .height(45.dp)
                 )
             },
             text = {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center,
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        if (errorMessage == "Success") {
-                            "Account has been successfully registered."
-                        } else {
-                            errorMessage
-                        },
-                        color = contentColor,
-                        modifier = Modifier.align(Alignment.Center),
+                        text = message,
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.body1
-                            .copy(
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp,
-                                color = textColor,
-                            ),
+                        style = MaterialTheme.typography.body1.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            color = textColor
+                        )
                     )
                 }
             },
             confirmButton = {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center,
+                    contentAlignment = Alignment.Center
                 ) {
                     Button(
                         onClick = {
-                            if (errorMessage == "Success") {
-                                isValidationErrorDialogVisible = false
-                                navController.navigate("login")
+                            if (isSuccess) {
+                                onSuccess()
                             } else {
-                                isValidationErrorDialogVisible = false
+                                onDismiss()
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = PrimaryColor,
-                            contentColor = White,
+                            contentColor = White
                         ),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(bottom = 12.dp),
+                        modifier = Modifier.padding(bottom = 12.dp)
                     ) {
-                        Text("Ok")
+                        Text("OK")
                     }
                 }
             },
-            backgroundColor = backgroundColor,
+            backgroundColor = backgroundColor
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewRegistrationView() {
-    val fakeNavController = rememberNavController()
-
-    RegistrationView(navController = fakeNavController)
 }
 
 
