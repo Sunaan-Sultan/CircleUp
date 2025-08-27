@@ -10,10 +10,14 @@ https://drive.google.com/file/d/1O0rfvzqcQ5wDOtOL7Vgw-DA4IXoxbz52/view?usp=shari
 
 <p float="left">
   <img src="https://github.com/user-attachments/assets/078a0c7b-9912-4bad-8009-a9142c05ed5a" width="33%" />
-    <img src="https://github.com/user-attachments/assets/a5033dd3-3ad3-48e8-88b1-c17801709cc3" width="33%" />
+  <img src="https://github.com/user-attachments/assets/0bb93217-911f-4147-b3ca-4b7b07750748" width="33%" />
   <img src="https://github.com/user-attachments/assets/811be196-3eae-495a-a520-040feaf0a5b7" width="33%" />
+  <img src="https://github.com/user-attachments/assets/c7b53343-6b69-4bab-8b73-1a70ffa6d66a" width="33%" />
 </p>
-![posts]()
+
+## Credentials
+- **Email**: member@gmail.com
+- **Password**: Member@123
 
 ## 🏗️ Clean Architecture Implementation
 
