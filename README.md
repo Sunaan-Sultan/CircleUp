@@ -15,6 +15,9 @@ https://drive.google.com/file/d/1O0rfvzqcQ5wDOtOL7Vgw-DA4IXoxbz52/view?usp=shari
   <img src="https://github.com/user-attachments/assets/c7b53343-6b69-4bab-8b73-1a70ffa6d66a" width="33%" />
 </p>
 
+## Apk
+[app-debug.zip](https://github.com/user-attachments/files/22011757/app-debug.zip)
+
 ## Credentials
 - **Email**: member@gmail.com
 - **Password**: Member@123
