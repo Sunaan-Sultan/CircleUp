@@ -65,7 +65,7 @@ import com.project.example.ui.theme.AppTheme
 import com.project.example.ui.theme.BackgroundColor
 import com.project.example.ui.theme.CircleUpTheme
 import com.project.example.ui.theme.Orientation
-import com.project.example.ui.theme.PrimaryColor2
+import com.project.example.ui.theme.PrimaryColor
 import com.project.example.ui.theme.rememberWindowSizeClass
 import com.project.repository.R
 
@@ -161,7 +161,7 @@ private fun LoginView(
                     modifier = Modifier
                         .padding(5.dp)
                         .offset(y = (20).dp),
-                    color = PrimaryColor2,
+                    color = PrimaryColor,
                 )
             }
 
@@ -279,7 +279,7 @@ private fun LoginView(
                     .fillMaxWidth()
                     .padding(top = AppTheme.dimens.large),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = PrimaryColor2,
+                    backgroundColor = PrimaryColor,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(20.dp)
@@ -325,7 +325,7 @@ private fun LoginView(
                     text = AnnotatedString("Sign Up"),
                     style = MaterialTheme.typography.body1.copy(
                         textDecoration = TextDecoration.Underline,
-                        color = PrimaryColor2,
+                        color = PrimaryColor,
                     ),
                     onClick = if (!uiState.isLoading) {
                         { navController.navigate("registration")}

@@ -69,12 +69,8 @@ fun DisplayPostsView(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
+            .padding(16.dp)
     ) {
-        TopAppBar(
-            title = { Text("Posts") }
-        )
-
         SearchBar(
             query = searchQuery,
             onQueryChange = { newQuery ->
@@ -85,7 +81,6 @@ fun DisplayPostsView(
                 viewModel.clearSearch()
             }
         )
-
 
         Spacer(modifier = Modifier.height(16.dp))
 

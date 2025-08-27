@@ -53,7 +53,7 @@ class MainActivity : FragmentActivity() {
                         topBar = {
                             AppBar(
                                 title = when (currentRoute) {
-                                    "home" -> "Circle UP"
+                                    "home" -> "Posts"
                                     "profile" -> "Profile"
                                     "posts" -> "Posts"
                                     "favourites" -> "Favorites"
