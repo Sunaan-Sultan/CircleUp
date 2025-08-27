@@ -3,6 +3,18 @@
 
 A modern Android application built with clean architecture principles and Factory design patterns. CircleUp demonstrates advanced Android development practices with a multi-layered architecture that separates concerns and ensures maintainable, testable code.
 
+## Demo Clip
+https://drive.google.com/file/d/1O0rfvzqcQ5wDOtOL7Vgw-DA4IXoxbz52/view?usp=sharing
+
+## Screenshot
+
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/078a0c7b-9912-4bad-8009-a9142c05ed5a" width="33%" />
+    <img src="https://github.com/user-attachments/assets/a5033dd3-3ad3-48e8-88b1-c17801709cc3" width="33%" />
+  <img src="https://github.com/user-attachments/assets/811be196-3eae-495a-a520-040feaf0a5b7" width="33%" />
+</p>
+![posts]()
+
 ## 🏗️ Clean Architecture Implementation
 
 CircleUp is built following **Clean Architecture** principles with clear separation of concerns and dependency inversion. The architecture ensures maintainable, testable, and framework-independent code.
