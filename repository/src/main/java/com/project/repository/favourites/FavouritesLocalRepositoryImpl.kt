@@ -2,15 +2,19 @@ package com.project.repository.favourites
 
 import android.content.Context
 import com.project.models.posts.FavoritePost
-import com.project.models.posts.FavoritesRepository
+import com.project.models.posts.FavouritesRepository
 import com.project.models.posts.Post
 import com.project.repository.database.DatabaseModule
 import com.project.repository.database.FavoritePostDao
 import com.project.repository.database.FavoritePostEntity
 
-class FavoritesLocalRepositoryImpl(
+/**
+ * This class is for local repository implementation
+ */
+
+class FavouritesLocalRepositoryImpl(
     private val context: Context
-) : FavoritesRepository {
+) : FavouritesRepository {
 
     private val favoritePostDao: FavoritePostDao by lazy {
         DatabaseModule.provideFavoritePostDao(context)

@@ -7,6 +7,10 @@ import com.project.repository.database.CachedPostDao
 import com.project.repository.database.CachedPostEntity
 import com.project.repository.database.DatabaseModule
 
+/**
+ * This class is for local repository implementation
+ */
+
 class PostCacheLocalRepositoryImpl(
     private val context: Context
 ) : PostCacheRepository {
@@ -84,7 +88,6 @@ class PostCacheLocalRepositoryImpl(
         cachedPostDao.updateFavoriteStatus(postId, isFavorite)
     }
 
-    // Helper method for searching cached posts
     suspend fun searchCachedPosts(query: String): List<Post> {
         return cachedPostDao.searchCachedPosts(query).map { entity ->
             Post(
@@ -95,11 +98,5 @@ class PostCacheLocalRepositoryImpl(
                 isFavorite = entity.isFavorite
             )
         }
-    }
-
-    // Helper method to clean old cache (older than 24 hours)
-    suspend fun cleanOldCache() {
-        val oneDayAgo = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
-        cachedPostDao.deleteOldCache(oneDayAgo)
     }
 }

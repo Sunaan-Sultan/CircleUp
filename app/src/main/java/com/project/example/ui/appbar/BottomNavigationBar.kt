@@ -1,6 +1,5 @@
 package com.project.example.ui.appbar
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -9,12 +8,11 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.*
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.project.example.ui.theme.indicatorColor
 import com.project.example.ui.theme.selectedIconColor
 import com.project.example.ui.theme.unselectedIconColor
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(

@@ -26,7 +26,7 @@ import com.project.repository.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayPosts(
+fun DisplayPostsView(
     context: Context? = null,
     viewModel: PostsViewModel = viewModel { PostsViewModel(context) }
 ) {
@@ -69,7 +69,7 @@ fun DisplayPosts(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(8.dp)
     ) {
         TopAppBar(
             title = { Text("Posts") }

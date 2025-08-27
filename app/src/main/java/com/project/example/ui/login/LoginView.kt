@@ -4,22 +4,45 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ListItemDefaults.contentColor
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,9 +61,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.project.example.PreferencesManager
 import com.project.example.ui.snackbar.CustomSnackbarVisuals
-import com.project.example.ui.theme.*
+import com.project.example.ui.theme.AppTheme
+import com.project.example.ui.theme.BackgroundColor
+import com.project.example.ui.theme.CircleUpTheme
+import com.project.example.ui.theme.Orientation
+import com.project.example.ui.theme.PrimaryColor2
+import com.project.example.ui.theme.rememberWindowSizeClass
 import com.project.repository.R
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -73,7 +100,6 @@ private fun LoginView(
     val scaffoldState = rememberScaffoldState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Handle login success
     LaunchedEffect(uiState.isLoginSuccessful) {
         if (uiState.isLoginSuccessful) {
             navController.navigate("home") {
@@ -84,7 +110,6 @@ private fun LoginView(
         }
     }
 
-    // Handle error messages
     LaunchedEffect(uiState.errorMessage) {
         uiState.errorMessage?.let { message ->
             snackbarHostState.showSnackbar(message)
@@ -142,7 +167,6 @@ private fun LoginView(
 
             Spacer(modifier = Modifier.height(AppTheme.dimens.spacer1))
 
-            // Email Field
             OutlinedTextField(
                 value = uiState.email,
                 onValueChange = viewModel::onEmailChanged,
@@ -184,7 +208,6 @@ private fun LoginView(
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            // Password Field
             OutlinedTextField(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChanged,
@@ -227,7 +250,6 @@ private fun LoginView(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            // Remember Me Checkbox
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = uiState.isRememberMeChecked,
@@ -247,7 +269,6 @@ private fun LoginView(
                 Spacer(modifier = Modifier.weight(1f))
             }
 
-            // Login Button
             Button(
                 onClick = {
                     focusManager.clearFocus()
@@ -288,7 +309,6 @@ private fun LoginView(
                 }
             }
 
-            // Sign Up Link
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

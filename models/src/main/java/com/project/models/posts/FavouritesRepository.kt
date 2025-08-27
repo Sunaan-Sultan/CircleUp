@@ -1,6 +1,6 @@
 package com.project.models.posts
 
-interface FavoritesRepository {
+interface FavouritesRepository {
     suspend fun addToFavorites(post: Post)
     suspend fun removeFromFavorites(postId: Int)
     suspend fun getFavorites(): List<FavoritePost>

@@ -3,8 +3,6 @@ package com.project.example.ui.appbar
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -22,8 +20,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.project.example.PreferencesManager
-import com.project.example.ui.favourites.Favourites
-import com.project.example.ui.home.DisplayPosts
+import com.project.example.ui.favourites.FavouritesView
+import com.project.example.ui.home.DisplayPostsView
 import com.project.example.ui.login.LoginScreen
 import com.project.example.ui.profile.ProfileScreen
 import com.project.example.ui.registration.RegistrationView
@@ -65,12 +63,12 @@ fun Navigation(
         }
 
         composable("home") {
-            DisplayPosts(context = context)
+            DisplayPostsView(context = context)
         }
 
         composable("favourites") {
             if (context != null) {
-                Favourites(context = context)
+                FavouritesView(context = context)
             } else {
                 Text("Context not available")
             }

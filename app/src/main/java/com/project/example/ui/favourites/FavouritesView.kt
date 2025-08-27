@@ -22,7 +22,7 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Favourites(
+fun FavouritesView(
     context: Context? = null,
     viewModel: FavoritesViewModel = context?.let {
         viewModel { FavoritesViewModel(it) }
@@ -47,7 +47,7 @@ fun Favourites(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(8.dp)
     ) {
         TopAppBar(
             title = {

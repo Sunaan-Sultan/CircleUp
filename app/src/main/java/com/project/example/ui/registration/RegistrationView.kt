@@ -117,7 +117,6 @@ fun RegistrationView(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Dialog should be outside the scrollable content
         if (uiState.showDialog) {
             RegistrationDialog(
                 validationResult = uiState.validationResult,
@@ -136,7 +135,6 @@ fun RegistrationView(
     }
 }
 
-// Keep all other composable functions unchanged
 @Composable
 private fun EmailField(
     email: String,
@@ -255,7 +253,7 @@ private fun RegistrationDialog(
 ) {
     if (isLoading) {
         AlertDialog(
-            onDismissRequest = { /* Prevent dismissal while loading */ },
+            onDismissRequest = { },
             title = {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -279,7 +277,7 @@ private fun RegistrationDialog(
                     )
                 }
             },
-            confirmButton = { /* No button while loading */ },
+            confirmButton = { },
             backgroundColor = backgroundColor
         )
         return
@@ -294,7 +292,7 @@ private fun RegistrationDialog(
 
     if (message.isNotEmpty()) {
         AlertDialog(
-            onDismissRequest = { /* Prevent dismissal by clicking outside */ },
+            onDismissRequest = { },
             title = {
                 Image(
                     painter = painterResource(

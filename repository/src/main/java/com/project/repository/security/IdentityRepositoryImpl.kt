@@ -3,6 +3,10 @@ package com.project.repository.security
 import com.project.models.security.IdentityRepository
 import com.project.models.users.User
 
+/**
+ * This class is for live repository implementation
+ */
+
 class IdentityRepositoryImpl : IdentityRepository {
     override fun userExists(username: String): Boolean {
         TODO("Not yet implemented")

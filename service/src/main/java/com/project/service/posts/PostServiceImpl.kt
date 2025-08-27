@@ -1,24 +1,21 @@
-
 package com.project.service.posts
 
 import android.content.Context
-import com.project.models.posts.FavoritesRepository
+import com.project.models.posts.FavouritesRepository
 import com.project.models.posts.Post
 import com.project.models.posts.PostCacheRepository
 import com.project.models.posts.PostRepository
 import com.project.models.posts.PostService
 import com.project.repository.NetworkUtil
 import com.project.repository.cacheposts.PostCacheLocalRepositoryImpl
-import com.project.repository.favourites.FavoritesLocalRepositoryImpl
-import com.project.repository.posts.PostLocalRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PostServiceImpl(
     private val context: Context? = null,
-    private val repository: PostRepository = PostLocalRepositoryImpl(context),
-    private val cacheRepository: PostCacheRepository? = context?.let { PostCacheLocalRepositoryImpl(it) },
-    private val favoritesRepository: FavoritesRepository? = context?.let { FavoritesLocalRepositoryImpl(it) }
+    private val repository: PostRepository = PostFactory.getPostRepository(context),
+    private val cacheRepository: PostCacheRepository? = context?.let { PostFactory.getPostCacheRepository(it) },
+    private val favouritesRepository: FavouritesRepository? = context?.let { PostFactory.getFavoritesRepository(it) }
 ) : PostService {
 
     override suspend fun getPosts(page: Int, limit: Int): List<Post> =
@@ -77,7 +74,7 @@ class PostServiceImpl(
     override suspend fun toggleFavorite(post: Post): Boolean =
         withContext(Dispatchers.IO) {
             try {
-                val newFavoriteStatus = favoritesRepository?.let { repo ->
+                val newFavoriteStatus = favouritesRepository?.let { repo ->
                     if (post.isFavorite) {
                         repo.removeFromFavorites(post.id)
                         false
@@ -98,7 +95,8 @@ class PostServiceImpl(
     override suspend fun getPostsWithFavorites(page: Int, limit: Int): List<Post> =
         withContext(Dispatchers.IO) {
             try {
-                getPosts(page, limit)
+                val posts = getPosts(page, limit)
+                syncPostsWithFavorites(posts)
             } catch (e: Exception) {
                 throw Exception("Failed to load posts with favorites: ${e.message}")
             }
@@ -107,7 +105,8 @@ class PostServiceImpl(
     override suspend fun getAllPostsWithFavorites(): List<Post> =
         withContext(Dispatchers.IO) {
             try {
-                getAllPosts()
+                val posts = getAllPosts()
+                syncPostsWithFavorites(posts)
             } catch (e: Exception) {
                 throw Exception("Failed to load all posts with favorites: ${e.message}")
             }
@@ -128,7 +127,7 @@ class PostServiceImpl(
     override suspend fun syncCacheWithFavorites() =
         withContext(Dispatchers.IO) {
             try {
-                val favoriteIds = favoritesRepository?.getFavoriteIds() ?: emptySet()
+                val favoriteIds = favouritesRepository?.getFavoriteIds() ?: emptySet()
                 val cachedPosts = cacheRepository?.getAllCachedPosts() ?: emptyList()
 
                 cachedPosts.forEach { post ->
@@ -138,6 +137,7 @@ class PostServiceImpl(
                     }
                 }
             } catch (e: Exception) {
+                // Log error if needed
             }
         }
 
@@ -159,4 +159,14 @@ class PostServiceImpl(
                     ?: emptyList()
             }
         }
+
+    /**
+     * Helper method to sync posts with favorite status
+     */
+    private suspend fun syncPostsWithFavorites(posts: List<Post>): List<Post> {
+        val favoriteIds = favouritesRepository?.getFavoriteIds() ?: emptySet()
+        return posts.map { post ->
+            post.copy(isFavorite = favoriteIds.contains(post.id))
+        }
+    }
 }

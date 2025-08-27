@@ -7,6 +7,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.project.models.users.User
 
+/**
+ * This class is for local repository implementation
+ */
+
 class IdentityLocalRepositoryImpl(context: Context) : IdentityRepository {
 
     private val users: List<User>

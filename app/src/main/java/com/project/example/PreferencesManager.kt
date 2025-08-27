@@ -4,12 +4,13 @@ import android.content.Context
 import android.content.SharedPreferences
 
 open class PreferencesManager(context: Context) {
-    private val     sharedPreferences: SharedPreferences =
+    private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("RegistrationKey", Context.MODE_PRIVATE)
     private val userPreference: SharedPreferences =
         context.getSharedPreferences("Email", Context.MODE_PRIVATE)
     private val passwordPreference: SharedPreferences =
         context.getSharedPreferences("Password", Context.MODE_PRIVATE)
+
     fun saveKey(key: String, value: String) {
         val editor = sharedPreferences.edit()
         editor.putString(key, value)
@@ -46,10 +47,5 @@ open class PreferencesManager(context: Context) {
 
     fun getPassword(key: String, defaultValue: String): String {
         return passwordPreference.getString(key, defaultValue) ?: defaultValue
-    }
-    fun removePassword(key: String) {
-        val editor = passwordPreference.edit()
-        editor.remove(key)
-        editor.apply()
     }
 }

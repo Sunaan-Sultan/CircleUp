@@ -56,7 +56,6 @@ class RegistrationViewModel : ViewModel() {
             showDialog = true
         )
 
-        // If validation is successful, simulate registration API call
         if (validationResult is ValidationResult.Success) {
             performRegistration()
         }
@@ -67,11 +66,8 @@ class RegistrationViewModel : ViewModel() {
             _uiState.value = _uiState.value.copy(isLoading = true)
 
             try {
-                // Simulate API call delay
                 delay(2000)
 
-                // Here you would typically call your registration repository/API
-                // For now, we'll just simulate success
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     validationResult = ValidationResult.Success
@@ -93,7 +89,4 @@ class RegistrationViewModel : ViewModel() {
         )
     }
 
-    fun clearForm() {
-        _uiState.value = RegistrationUiState()
-    }
 }

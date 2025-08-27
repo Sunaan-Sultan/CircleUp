@@ -179,27 +179,6 @@ class PostsViewModel(
         }
     }
 
-    private suspend fun loadAllPostsForSearch(query: String) {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-
-        try {
-            val allPosts = postService.getAllPostsWithFavorites()
-            val filteredPosts = filterPosts(allPosts, query)
-
-            _uiState.value = _uiState.value.copy(
-                allPosts = allPosts,
-                displayedPosts = filteredPosts,
-                isLoading = false,
-                hasMoreData = false
-            )
-        } catch (e: Exception) {
-            _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                error = e.message ?: "Error searching posts"
-            )
-        }
-    }
-
     private fun filterPosts(posts: List<Post>, query: String): List<Post> {
         if (query.isEmpty()) return posts
 
@@ -216,14 +195,6 @@ class PostsViewModel(
             uiSearchQuery = "",
             displayedPosts = _uiState.value.allPosts
         )
-    }
-
-    fun retry() {
-        if (_uiState.value.searchQuery.isNotEmpty()) {
-            searchPosts(_uiState.value.searchQuery)
-        } else {
-            loadPosts()
-        }
     }
 
     fun clearError() {

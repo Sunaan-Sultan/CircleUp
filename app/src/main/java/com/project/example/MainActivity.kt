@@ -22,9 +22,6 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
 
         val prefs = PreferencesManager(applicationContext)
-        val userRole = prefs.getKey("userRole", "member")
-        Log.d("MAIN", "Read userRole from prefs = $userRole")
-
         val savedUser = prefs.getUsername("user", "")
         val savedPass = prefs.getPassword("pass", "")
         val startDestination = if (savedUser.isNotEmpty() && savedPass.isNotEmpty()) {
@@ -32,7 +29,6 @@ class MainActivity : FragmentActivity() {
         } else {
             "login"
         }
-        Log.d("MAIN", "startDestination = $startDestination (savedUser='${savedUser}', savedPass='${savedPass.isNotEmpty()}')")
 
         setContent {
             val navController = rememberNavController()
@@ -40,10 +36,8 @@ class MainActivity : FragmentActivity() {
             val navBackStackEntry = navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry.value?.destination?.route
 
-            // Routes where both topbar and bottombar should be hidden
             val hideAllBars = listOf("login")
 
-            // Routes where only bottombar should be hidden (topbar visible)
             val hideBottomBarOnly = listOf("registration")
 
             val shouldShowTopBar = currentRoute != null && currentRoute !in hideAllBars
@@ -61,16 +55,13 @@ class MainActivity : FragmentActivity() {
                                 title = when (currentRoute) {
                                     "home" -> "Circle UP"
                                     "profile" -> "Profile"
-                                    "products" -> "Products"
-                                    "myCart" -> "My Cart"
-                                    "bio" -> "Update Profile"
                                     "posts" -> "Posts"
                                     "favourites" -> "Favorites"
                                     "registration" -> "Sign Up"
                                     else -> "Circle UP"
                                 },
                                 showCartIcon = false,
-                                showBackButton = currentRoute in listOf("myCart", "registration"),
+                                showBackButton = currentRoute in listOf("registration"),
                                 navController = navController
                             )
                         },

@@ -16,7 +16,6 @@ class IdentityServiceImpl(private val context: Context) : IdentityService {
         return identityRepository.getUser(username)
     }
 
-
     override fun userExists(username: String): Boolean {
         val identityRepository = SecurityFactory.getIdentityRepository(context)
         return identityRepository.userExists(username)

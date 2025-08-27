@@ -9,7 +9,6 @@ class AuthInterceptor : Interceptor {
         val original = chain.request()
         val token = SessionManager.accessToken
 
-        // If we have one, add the header; otherwise just proceed unchanged
         val request = if (!token.isNullOrBlank()) {
             original.newBuilder()
                 .header("Authorization", "Bearer $token")

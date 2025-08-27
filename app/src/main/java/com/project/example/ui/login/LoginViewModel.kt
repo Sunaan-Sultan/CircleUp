@@ -40,7 +40,7 @@ class LoginViewModel(
     }
 
     fun onEmailChanged(email: String) {
-        if (email.length <= 40) { // Max email length validation
+        if (email.length <= 40) {
             _uiState.value = _uiState.value.copy(
                 email = email,
                 errorMessage = null
@@ -49,7 +49,7 @@ class LoginViewModel(
     }
 
     fun onPasswordChanged(password: String) {
-        if (password.length <= 20) { // Max password length validation
+        if (password.length <= 20) {
             _uiState.value = _uiState.value.copy(
                 password = password,
                 errorMessage = null
@@ -77,7 +77,6 @@ class LoginViewModel(
     fun onLoginClicked() {
         val currentState = _uiState.value
 
-        // Basic validation
         if (currentState.email.isBlank()) {
             _uiState.value = currentState.copy(errorMessage = "Email is required")
             return
@@ -88,7 +87,6 @@ class LoginViewModel(
             return
         }
 
-        // Show loading state
         _uiState.value = currentState.copy(
             isLoading = true,
             errorMessage = null
@@ -141,13 +139,11 @@ class LoginViewModel(
     }
 
     private fun saveUserSession(user: User, email: String, password: String) {
-        // Save session data
         preferencesManager.saveKey("userId", user.id.toString())
         preferencesManager.saveKey("userRole", user.userRole.lowercase())
         preferencesManager.saveUsername("user", email)
         preferencesManager.savePassword("pass", password)
 
-        // Save credentials if remember me is checked
         if (_uiState.value.isRememberMeChecked) {
             preferencesManager.saveKey("email", email)
             preferencesManager.saveKey("password", password)
