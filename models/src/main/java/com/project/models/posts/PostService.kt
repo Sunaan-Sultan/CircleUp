@@ -7,7 +7,6 @@ interface PostService {
     suspend fun toggleFavorite(post: Post): Boolean
     suspend fun getPostsWithFavorites(page: Int, limit: Int): List<Post>
     suspend fun getAllPostsWithFavorites(): List<Post>
-
     suspend fun getPostsOffline(page: Int, limit: Int): List<Post>
     suspend fun getAllPostsOffline(): List<Post>
     suspend fun syncCacheWithFavorites()

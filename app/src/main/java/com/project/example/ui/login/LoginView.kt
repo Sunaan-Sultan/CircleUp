@@ -148,7 +148,6 @@ private fun LoginView(
                 .fillMaxWidth()
                 .background(if (isSystemInDarkTheme()) BackgroundColor else Color.White),
         ) {
-            // App Title
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,

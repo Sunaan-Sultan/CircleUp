@@ -9,8 +9,4 @@ object RuntimeProfile {
     fun getCurrentRuntime(): Int {
         return runtime
     }
-
-    fun setCurrentRuntime(rt: Int) {
-        this.runtime = rt
-    }
 }
