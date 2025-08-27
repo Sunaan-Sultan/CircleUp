@@ -1,41 +1,93 @@
-[circleup_readme.md](https://github.com/user-attachments/files/22009395/circleup_readme.md)
+[circleup_readme.md](https://github.com/user-attachments/files/22010259/circleup_readme.md)
 # CircleUp
 
-A modern Android social networking application built with clean architecture principles and Factory design patterns. CircleUp demonstrates advanced Android development practices with a multi-layered architecture that separates concerns and ensures maintainable, testable code.
+A modern Android application built with clean architecture principles and Factory design patterns. CircleUp demonstrates advanced Android development practices with a multi-layered architecture that separates concerns and ensures maintainable, testable code.
 
-## 🏗️ Architecture Overview
+## 🏗️ Clean Architecture Implementation
 
-CircleUp follows a clean architecture pattern with clear separation of concerns across four distinct layers:
+CircleUp is built following **Clean Architecture** principles with clear separation of concerns and dependency inversion. The architecture ensures maintainable, testable, and framework-independent code.
 
 ```
-App Layer (UI) → Service Layer → Repository Layer → Models Layer
+App/UI Layer → Service Layer → Repository Layer → Models Layer
+
+```
+<img width="604" height="161" alt="Screenshot 2025-08-27 204355" src="https://github.com/user-attachments/assets/5cca85fc-47a1-4dd1-a469-ed242750b189" />
+
+### Clean Architecture Layers
+
+#### **🎨 UI Layer (Frameworks & Drivers)**
+**Role**: External interfaces - Activities, Views, ViewModels, and UI components
+
+- **Components**: `appbar/`, `favourites/`, `home/`, `login/`, `profile/`, `registration/`
+- **Custom UI**: `BottomNavigationBar`, `CustomSnackbarVisuals`
+- **Theme System**: `AppUtils`, `Color`, `Theme`
+- **Dependency Flow**: Depends on Service Layer only
+
+#### **⚙️ Service Layer (Use Cases/Application Business Rules)**
+**Role**: Contains application-specific business rules and orchestrates data flow
+
+- **Business Logic**: Authentication services, Post services, Favourites services
+- **Factory Patterns**: `SecurityFactory`, `PostFactory`, `FavouritesFactory`
+- **Use Case Orchestration**: Coordinates between UI and Repository layers
+- **Framework Independence**: No dependency on Android-specific components
+
+#### **🗄️ Repository Layer (Interface Adapters)**
+**Role**: Converts data between use cases and external systems (databases, APIs)
+
+- **Data Access**: Post repositories, Cache repositories, Database operations
+- **Abstraction**: Hides implementation details from Service layer
+- **Runtime Switching**: Dynamic selection between live and local implementations
+- **Adapter Pattern**: Adapts external data sources to internal business needs
+
+#### **📊 Models Layer (Entities)**
+**Role**: Core business entities and enterprise-wide business rules
+
+- **Business Entities**: Posts, Users, Security, Favourites models
+- **Pure Business Logic**: Independent of frameworks and external concerns
+- **Data Transfer Objects**: Clean data structures for layer communication
+- **Enterprise Rules**: Fundamental business rules that don't change
+
+## 🎯 Clean Architecture Principles Demonstrated
+
+### ✅ **1. Dependency Rule**
+Dependencies point inward - outer layers depend on inner layers, never the reverse:
+```
+UI → Service → Repository → Models
 ```
 
-### Architecture Components
+### ✅ **2. Independence of Frameworks**
+The Service layer contains pure business logic independent of Android frameworks:
+```kotlin
+// Service layer doesn't know about Android Context or Room Database
+// Repository layer handles these framework-specific details
+```
 
-- **App Layer (UI)**: Contains Activities, Fragments, ViewModels, and UI components
-  - `appbar/`, `favourites/`, `home/`, `login/`, `profile/`, `registration/`
-  - Custom UI components like `BottomNavigationBar`, `CustomSnackbarVisuals`
-  - Theme management with `AppUtils`, `Color`, `Dimensions`, `Theme`
+### ✅ **3. Independence of Database**
+Repository abstraction allows switching between different data sources:
+```kotlin
+return if (RuntimeProfile.getCurrentRuntime() == LIVE_RUNTIME) {
+    PostRepositoryImpl()        // Live Network/API implementation
+} else {
+    PostLocalRepositoryImpl()   // Local Room database implementation
+}
+```
 
-- **Service Layer**: Implements business logic and coordinates between UI and data layers
-  - Authentication services, Post services, Favourites services
-  - Factory pattern implementations for service creation
+### ✅ **4. Testability**
+Each layer can be tested independently with mocked dependencies:
+- **UI Layer**: Test ViewModels with mocked Services
+- **Service Layer**: Test business logic with mocked Repositories  
+- **Repository Layer**: Test data operations independently
+- **Factory Pattern**: Easy mocking for different implementations
 
-- **Repository Layer**: Handles data operations, API calls, and local storage
-  - Post repositories, Cache repositories, Database operations
-  - Runtime profile-based repository selection
-
-- **Models Layer**: Contains data models, entities, and DTOs
-  - Posts, Users, Security, Favourites models
-  - Database entities and data transfer objects
+### ✅ **5. Independence of UI**
+Business logic is completely separated from UI concerns - the same business logic could work with different UI frameworks.
 
 ## 🛠️ Setup & Build Instructions
 
 ### Prerequisites
-- **Android Studio**: Arctic Fox (2020.3.1) or later
+- **Android Studio**: (latest stable version recommended)
 - **JDK**: 11 or higher
-- **Android SDK**: API level 21+
+- **Android SDK**: API level 24+
 - **Kotlin**: Latest stable version
 - **Git**: For version control
 
@@ -66,21 +118,16 @@ App Layer (UI) → Service Layer → Repository Layer → Models Layer
    ./gradlew installDebug
    ```
 
-### Build Variants
-- **Debug**: Development build with debugging enabled and test data
-- **Release**: Production-ready build with optimizations
-
 ## 🏛️ Libraries & Technologies Used
 
 ### Core Technologies
 - **Kotlin**: Primary programming language
+- **Jetpack Compose**: declarative UI framework
 - **Android SDK**: Native Android development
 - **MVVM Architecture**: Model-View-ViewModel pattern with ViewModels
 
 ### Key Android Components
 - **Room Database**: Local data persistence and caching
-- **ViewBinding**: Type-safe view references
-- **Navigation Component**: Fragment-based navigation
 - **Material Design**: Modern UI components and theming
 
 ### Networking & Data Management
@@ -91,8 +138,7 @@ App Layer (UI) → Service Layer → Repository Layer → Models Layer
 ### UI & User Experience
 - **Custom Snackbar**: Enhanced user feedback system
 - **Bottom Navigation**: Intuitive app navigation
-- **Dynamic Theming**: Customizable app appearance
-- **Responsive Design**: Adaptive layouts for different screen sizes
+- **Dynamic Theming**: Customizable app appearance with Dark mode support
 
 ## 🏭 Factory Pattern Implementation
 
@@ -187,30 +233,69 @@ object FavouritesFactory {
 #### 🎯 **Runtime Profile Management**
 All factories use `RuntimeProfile.getCurrentRuntime()` to determine execution environment:
 - **LIVE_RUNTIME**: Production/online mode with server APIs
-- **Local Mode**: Offline/development mode with local storage
+- **Local Mode**: Offline/development mode with local storage/JSON 
 
 #### 🧪 **Enhanced Testability**
 - Easy mocking of dependencies in unit tests
 - Consistent object creation patterns
 - Isolated factory logic for focused testing
 
-#### 🔄 **Flexible Architecture**
-- Dynamic switching between implementations
-- Support for different deployment environments
-- Easy addition of new repository types
+#### 🔄 **Dependency Inversion Principle**
+High-level modules (Services) don't depend on low-level modules (specific Repository implementations):
+```kotlin
+// Service depends on Repository interface, not concrete implementation
+class PostService(private val repository: PostRepository) {
+    // Business logic here - doesn't care if it's local or remote repository
+}
+```
+
+#### 📦 **Single Responsibility Principle**  
+Each factory has a single, well-defined responsibility:
+- `SecurityFactory` → Authentication and identity management
+- `PostFactory` → Post creation, caching, and management
+- `FavouritesFactory` → User favourites functionality
+
+## 🏆 Advanced Clean Architecture Features
+
+### **🌐 Runtime Environment Abstraction**
+Beyond typical Clean Architecture, The project implements environment-agnostic business logic:
+```kotlin
+RuntimeProfile.getCurrentRuntime() == LIVE_RUNTIME
+```
+This allows the same business rules to work in different deployment environments without code changes.
+
+## 🎖️ Clean Architecture Benefits Achieved
+
+### **🧪 Enhanced Testability**
+- **Isolated Testing**: Each layer can be tested independently
+- **Mock Dependencies**: Factory pattern enables easy mocking
+- **Pure Business Logic**: Service layer contains testable business rules
+- **Framework Independence**: Core logic can be tested without Android dependencies
+
+### **🔧 Maintainability**
+- **Clear Boundaries**: Well-defined layer responsibilities
+- **Loose Coupling**: Layers communicate through interfaces
+- **High Cohesion**: Related functionality grouped together
+- **Easy Refactoring**: Changes in one layer don't affect others
+
+### **🚀 Scalability**
+- **Feature Addition**: New features follow established patterns
+- **Team Development**: Different teams can work on different layers
+- **Technology Migration**: Can switch frameworks without affecting business logic (Kotlin Multiplatform)
+- **Environment Flexibility**: Same codebase works in multiple environments
 
 #### 📦 **Dependency Management**
 - Centralized object creation logic
 - Consistent initialization patterns
 - Proper context management for Android components
 
+
 ## 🔧 Key Features
 
 ### Social Networking Core
-- **User Authentication**: Secure registration and login system
-- **Post Management**: Create, view, edit, and delete posts
+- **User Authentication**: Registration validation and login system
+- **Post Management**: View, search, and tag posts as favourites
 - **Favourites System**: Bookmark and manage favourite posts
-- **User Profiles**: Personal profile management and viewing
 
 ### Technical Features
 - **Offline-First Architecture**: Full functionality without internet
@@ -228,7 +313,7 @@ All factories use `RuntimeProfile.getCurrentRuntime()` to determine execution en
 ### Assumptions
 
 #### Technical Environment
-- **Android Version**: Minimum API level 21 (Android 5.0+)
+- **Android Version**: Minimum API level 24 (Android 7.0+)
 - **Kotlin Runtime**: Application assumes Kotlin runtime environment
 - **Storage Access**: Device has sufficient storage for local repositories and cache
 - **Memory Management**: Adequate device memory for Room database operations
@@ -242,113 +327,9 @@ All factories use `RuntimeProfile.getCurrentRuntime()` to determine execution en
 
 #### Technical Constraints
 - **Runtime Switching**: Runtime profile changes require app restart
-- **Context Dependencies**: Local repositories require Android Context, limiting pure unit testing
-- **Memory Usage**: Local repositories and cache may consume significant device storage
+- **Memory Usage**: Local repositories and cache may consume more device storage
 - **Database Migrations**: Room database schema changes require careful migration handling
-
-#### Feature Limitations
-- **Real-time Sync**: Limited real-time synchronization between local and live data
-- **Conflict Resolution**: Basic conflict resolution when switching between runtime modes
-- **Bulk Operations**: Large data operations may impact UI performance
-- **Background Sync**: No background synchronization service implemented
-
-#### Architecture Trade-offs
-- **Factory Complexity**: Runtime-based factory selection adds complexity
-- **Code Duplication**: Separate implementations for live and local repositories
 - **Testing Complexity**: Mocking runtime profiles requires additional setup
-- **Dependency Chain**: Deep dependency chains in factory pattern may affect performance
-
-### Future Enhancement Opportunities
-
-#### Technical Improvements
-- **Background Sync Service**: Implement WorkManager for data synchronization
-- **Improved Caching**: Add intelligent cache invalidation strategies
-- **Performance Monitoring**: Add analytics for repository performance tracking
-- **Memory Optimization**: Implement lazy loading and pagination for large datasets
-
-#### Feature Enhancements
-- **Real-time Updates**: WebSocket integration for live updates
-- **Advanced Search**: Full-text search across posts and users
-- **Data Export**: Allow users to export their data
-- **Multi-account Support**: Support for multiple user accounts
-
-#### Architecture Evolution
-- **Dependency Injection**: Integrate Dagger Hilt for better dependency management
-- **Coroutines Flow**: Enhanced reactive programming with StateFlow/SharedFlow
-- **Modular Architecture**: Split into feature modules for better scalability
-- **Compose Migration**: Gradual migration to Jetpack Compose for modern UI
-
-## 🧪 Testing Strategy
-
-### Unit Testing
-```bash
-./gradlew test
-```
-
-**Factory Testing Benefits:**
-- **Isolated Testing**: Each factory can be tested independently
-- **Mock Repositories**: Easy mocking of repository implementations
-- **Runtime Simulation**: Test different runtime profiles in isolation
-
-### Integration Testing
-```bash
-./gradlew connectedAndroidTest
-```
-
-**Repository Testing:**
-- Test local vs live repository behavior
-- Validate cache repository functionality
-- Verify factory selection logic
-
-### Testing Architecture
-The Factory pattern implementation enables comprehensive testing:
-- **Service Layer**: Mock repositories for business logic testing
-- **Repository Layer**: Test both local and live implementations
-- **Factory Logic**: Validate runtime profile selection
-
-## 📱 Project Structure
-
-```
-app/
-├── manifests/
-├── kotlin+java/
-│   └── com.project.example/
-│       ├── ui/                 # App Layer
-│       │   ├── appbar/
-│       │   ├── favourites/
-│       │   ├── home/
-│       │   ├── login/
-│       │   ├── profile/
-│       │   └── registration/
-│       └── models/             # Models Layer
-│           ├── posts/
-│           ├── security/
-│           └── users/
-├── repository/                 # Repository Layer
-│   ├── cacheposts/
-│   ├── database/
-│   └── favourites/
-└── service/                   # Service Layer
-    ├── favourites/
-    ├── posts/
-    └── security/
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Follow the existing Factory pattern conventions
-4. Add tests for new factories or repository implementations
-5. Commit changes (`git commit -m 'Add amazing feature'`)
-6. Push to branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-### Development Guidelines
-- Maintain the runtime profile pattern in new factories
-- Add both live and local implementations for new repositories
-- Follow the existing package structure
-- Include comprehensive error handling
 
 ## 📞 Contact
 
