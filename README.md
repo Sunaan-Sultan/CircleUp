@@ -18,7 +18,7 @@ https://drive.google.com/file/d/1O0rfvzqcQ5wDOtOL7Vgw-DA4IXoxbz52/view?usp=shari
 ## Apk
 [app-debug.zip](https://github.com/user-attachments/files/22011757/app-debug.zip)
 
-## Credentials
+## Login Credentials
 - **Email**: member@gmail.com
 - **Password**: Member@123
 
