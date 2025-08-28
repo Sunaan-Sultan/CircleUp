@@ -289,7 +289,6 @@ This allows the same business rules to work in different deployment environments
 - **Isolated Testing**: Each layer can be tested independently
 - **Mock Dependencies**: Factory pattern enables easy mocking
 - **Pure Business Logic**: Service layer contains testable business rules
-- **Framework Independence**: Core logic can be tested without Android dependencies
 
 ### **🔧 Maintainability**
 - **Clear Boundaries**: Well-defined layer responsibilities
@@ -303,15 +302,9 @@ This allows the same business rules to work in different deployment environments
 - **Technology Migration**: Can switch frameworks without affecting business logic (Kotlin Multiplatform)
 - **Environment Flexibility**: Same codebase works in multiple environments
 
-#### 📦 **Dependency Management**
-- Centralized object creation logic
-- Consistent initialization patterns
-- Proper context management for Android components
-
-
 ## 🔧 Key Features
 
-### Social Networking Core
+### Core
 - **User Authentication**: Registration validation and login system
 - **Post Management**: View, search, and tag posts as favourites
 - **Favourites System**: Bookmark and manage favourite posts
